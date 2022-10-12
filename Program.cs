@@ -9,17 +9,37 @@ class Programm
 
         void PrintSimpleMessage(string message) => Console.WriteLine(message);
 
+        void PrintColorMessageGreen(string message)
+        {
+            // Устанавливаем красный цвет символов
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            // Сбрасываем настройки цвета
+            Console.ResetColor();
+        }
+        void PrintColorMessageRed(string message)
+        {
+            // Устанавливаем красный цвет символов
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            // Сбрасываем настройки цвета
+            Console.ResetColor();
+        }
+
         // создаем банковский счет
         Account account = new Account(PrintSimpleMessage);
+        
+        account.UnregisterHandler(PrintSimpleMessage);
+        account.RegisterHandler(PrintColorMessageGreen);  
 
         // Добавляем в делегат ссылку на метод PrintSimpleMessage
         // account.RegisterHandler(PrintSimpleMessage);
         //account.taken = PrintSimpleMessage;
 
-        account.Add(200.00M);  
-        
-       
+        account.Add(200.00M);
 
+        account.UnregisterHandler(PrintColorMessageGreen);
+        account.RegisterHandler(PrintColorMessageRed);
         // Два раза подряд пытаемся снять деньги
         account.Take(100.00M);
         account.Take(150.00M);
