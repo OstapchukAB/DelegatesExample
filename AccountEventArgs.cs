@@ -9,7 +9,7 @@ namespace DelegatesExample
     class AccountEventArgs
     {
 
-        // Сообщение
+        // Сообщение 
         public string Message { get; }
         // Сумма, на которую изменился счет
         public int Sum { get; }
