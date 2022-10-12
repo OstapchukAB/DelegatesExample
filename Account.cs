@@ -36,6 +36,10 @@ namespace DelegatesExample
                 // вызываем делегат, передавая ему сообщение
                 taken?.Invoke($"Со счета списано {sum} у.е.");
             }
+            else
+            {
+                taken?.Invoke($"Недостаточно средств. Баланс: {this.sum} у.е.");
+            }
         }
     }
 }
