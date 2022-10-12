@@ -78,7 +78,8 @@ class Programm
 
         //***************create account 2********
         Account account2 = new Account(PrintSimpleMessage);
-        account2.Notify += PrintColorMessageRed;
+       // account2.Notify += PrintColorMessageRed;
+       account2.Notify += (string s) => Console.WriteLine($"---{s}---");
 
         // account.UnregisterHandler(PrintSimpleMessage);
         //  account.RegisterHandler(PrintColorMessageGreen);
