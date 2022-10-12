@@ -32,7 +32,12 @@ class Programm
         //Operation add = (int x, int y) => { return x + y; };
         //msg($"Результат сложения чисел {x} и {y} равно {add(x,y)}");
 
-        void PrintSimpleMessage(string message) => Console.WriteLine(message);
+        void PrintSimpleMessage(string message) 
+        {
+           // var uniq = DateTime.Now;
+            Console.WriteLine($"{message}");
+            //Console.WriteLine("---");
+        }
 
         void PrintColorMessageGreen(string message)
         {
@@ -46,16 +51,17 @@ class Programm
         {
             // Устанавливаем красный цвет символов
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
+            Console.WriteLine($"{message}");
             // Сбрасываем настройки цвета
             Console.ResetColor();
         }
 
         // создаем банковский счет
         Account account = new Account(PrintSimpleMessage);
+        account.Notify += PrintColorMessageRed;
 
        // account.UnregisterHandler(PrintSimpleMessage);
-      //  account.RegisterHandler(PrintColorMessageGreen);
+       //  account.RegisterHandler(PrintColorMessageGreen);
 
         // Добавляем в делегат ссылку на метод PrintSimpleMessage
         // account.RegisterHandler(PrintSimpleMessage);
