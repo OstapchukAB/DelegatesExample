@@ -2,6 +2,10 @@
 
 namespace DelegatesExample
 {
+    /// <summary>
+    /// Делегат
+    /// </summary>
+    /// <param name="message"></param>
     public delegate void AccountHandler(string message);
    
     class Account
@@ -10,6 +14,7 @@ namespace DelegatesExample
 
         // Создаем переменную делегата
         public AccountHandler? taken;
+ 
         public event AccountHandler? Notify;
 
 
@@ -17,6 +22,7 @@ namespace DelegatesExample
         {
             RegisterHandler(delegat);
             //taken = delegat; 
+            Notify?.Invoke("Внимание! Действие со счетом");  
             taken?.Invoke($"Счет создан. Баланс:{this.sum:C2}");
         }
 
@@ -32,7 +38,8 @@ namespace DelegatesExample
 
         // добавить средства на счет
         public void Add(decimal sum) 
-        { 
+        {
+            Notify?.Invoke("Внимание! Попытка положить средства на счет");
             this.sum += sum;
 
             taken?.Invoke($"На счет положена сумма {sum:C2}. Баланс:{this.sum:C2}");
@@ -41,6 +48,7 @@ namespace DelegatesExample
         // взять деньги с счета
         public void Take(decimal sum)
         {
+            Notify?.Invoke("Внимание! Попытка положить снять средства со счёта");
             taken?.Invoke($"Списать со счета :{sum:C2}");
             // берем деньги, если на счете достаточно средств
             if (this.sum >= sum)
@@ -52,6 +60,7 @@ namespace DelegatesExample
             }
             else
             {
+                Notify?.Invoke("Внимание! Попытка положить снять средства со счёта. Недостаточно средств");
                 taken?.Invoke($"Недостаточно средств. Баланс:{this.sum}");
             }
         }
