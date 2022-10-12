@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DelegatesExample
+﻿namespace DelegatesExample
 {
     public delegate void AccountHandler(string message);
     class Account
     {
         int sum; // Переменная для хранения суммы
-                 
+
         // Создаем переменную делегата
-        AccountHandler? taken;
+        public AccountHandler? taken;
 
         // через конструктор устанавливается начальная сумма на счете
         public Account(int sum) => this.sum = sum;
 
-        // Регистрируем делегат
-        public void RegisterHandler(AccountHandler delegat)
-        {
-            taken = delegat;
-        }
+        //// Регистрируем делегат
+        //public void RegisterHandler(AccountHandler delegat)
+        //{
+        //    taken = delegat;
+        //}
 
         // добавить средства на счет
         public void Add(int sum) => this.sum += sum;
