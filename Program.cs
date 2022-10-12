@@ -75,6 +75,29 @@ class Programm
         account.Take(100.00M);
         account.Take(150.00M);
 
+
+        //***************create account 2********
+        Account account2 = new Account(PrintSimpleMessage);
+        account2.Notify += PrintColorMessageRed;
+
+        // account.UnregisterHandler(PrintSimpleMessage);
+        //  account.RegisterHandler(PrintColorMessageGreen);
+
+        // Добавляем в делегат ссылку на метод PrintSimpleMessage
+        // account.RegisterHandler(PrintSimpleMessage);
+        //account.taken = PrintSimpleMessage;
+
+        account2.Add(500.00M);
+
+        // account.UnregisterHandler(PrintColorMessageGreen);
+        // account.RegisterHandler(PrintColorMessageRed);
+        // Два раза подряд пытаемся снять деньги
+        account2.Take(499.99M);
+        account2.Take(50.00M);
+        account2.Add(100.00M);
+        account2.Take(50.00M);
+        //********************
+
         Console.WriteLine();
         Console.Write("Для выхода нажмите любую клавишу");
         Console.ReadKey();
