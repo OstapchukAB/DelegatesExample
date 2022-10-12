@@ -3,14 +3,16 @@
 namespace DelegatesExample
 {
     public delegate void AccountHandler(string message);
+   
     class Account
     {
         decimal sum; // Переменная для хранения суммы
 
         // Создаем переменную делегата
         public AccountHandler? taken;
+        public event AccountHandler? Notify;
 
- 
+
         public Account(AccountHandler delegat) 
         {
             RegisterHandler(delegat);
