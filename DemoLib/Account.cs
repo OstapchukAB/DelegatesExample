@@ -125,18 +125,22 @@
                
                 this.SumBuy += sum;
 
-                var koef = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy) ?? 0.00M);
-                if (koef > 0)
+                notify?.Invoke(this, new AccountEventArgs($"Покупка", sum, IdAccount));
+
+                var CurentCachBack = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy) ?? 0.00M);
+                if (CurentCachBack > 0)
                 {
-                    this.CashBack = this.CashBack + koef;
+                    
+                    this.CashBack = this.CashBack + CurentCachBack;
                     this.SumBuy = 0;
+                    notify?.Invoke(this, new AccountEventArgs($"Вам начислен кэшбэк", CurentCachBack, IdAccount));
                 }
                 //if (this.SumBuy > 100)
                 //{
                 //    this.CashBack += this.SumBuy / 100;
                 //    this.SumBuy = 0.00M;
                 //}
-                notify?.Invoke(this, new AccountEventArgs($"Покупка", sum, IdAccount));
+               
 
             }
             else

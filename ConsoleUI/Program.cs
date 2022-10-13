@@ -70,7 +70,7 @@ namespace ConsoleUI
                                         $"Сумма:[{e.SumOperation:C2}]",
                                         $"Баланс:[{sender.Sum:C2}]",
                                         $"Сумма покупок:[{sender.SumBuy:C2}]",
-                                        $"Кэшбэк:[{sender.CashBack:C2}]"
+                                        $"Общий кэшбэк:[{sender.CashBack:C2}]"
 
                 );
             Console.WriteLine(myMessage);
