@@ -2,6 +2,7 @@
 {
 
     public delegate void AccountHandler(string message);
+    public delegate decimal AccountAlgoritmCashBack(decimal sumBuy);
     public delegate void AccountHandlerEvent(Account sender, AccountEventArgs e);
 
     /// <summary>
@@ -73,6 +74,20 @@
             }
         }
 
+        AccountAlgoritmCashBack? algCashBack;
+        public event AccountAlgoritmCashBack? AlgCashBack
+        {
+            add
+            {
+                algCashBack += value;
+                //Console.WriteLine($"{value?.Method.Name} добавлен");
+            }
+            remove
+            {
+                algCashBack -= value;
+                // Console.WriteLine($"{value?.Method.Name} удален");
+            }
+        }
 
 
         // добавить средства на счет
@@ -109,11 +124,18 @@
                 this.Sum -= sum;
                
                 this.SumBuy += sum;
-                if (this.SumBuy > 100)
+
+                var koef = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy) ?? 0.00M);
+                if (koef > 0)
                 {
-                    this.CashBack += this.SumBuy / 100;
-                    this.SumBuy = 0.00M;
+                    this.CashBack = this.CashBack + koef;
+                    this.SumBuy = 0;
                 }
+                //if (this.SumBuy > 100)
+                //{
+                //    this.CashBack += this.SumBuy / 100;
+                //    this.SumBuy = 0.00M;
+                //}
                 notify?.Invoke(this, new AccountEventArgs($"Покупка", sum, IdAccount));
 
             }

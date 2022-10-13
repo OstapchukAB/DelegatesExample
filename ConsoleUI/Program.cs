@@ -22,10 +22,14 @@ namespace ConsoleUI
             //***************create account 2 * *******
             Account account2 = new Account(Account_Notify, 0.00M);
             account2.Add(500.00M);
+            account2.AlgCashBack += Account2_AlgCashBack;
 
-          
             account2.Buy(200.00M);
-          
+
+            account2.Buy(99.00M);
+
+            account2.Buy(150.00M);
+
             account2.Take(50.00M);
             
             account2.Add(100.00M);
@@ -40,6 +44,21 @@ namespace ConsoleUI
 
         }
 
+        /// <summary>
+        /// Алгоритм расчета кэшбэка
+        /// </summary>
+        /// <param name="sumBuy"></param>
+        /// <returns></returns>
+        private static decimal Account2_AlgCashBack(decimal sumBuy)
+        {
+            if (sumBuy > 500M)
+                return 0.10M;
+            else if (sumBuy > 100M)
+                return 0.01M;
+            else
+                return 0.00M;
+        }
+
         private static void Account_Notify(Account sender, AccountEventArgs e)
         {
             var myMessage = String.Join("  ",
@@ -50,11 +69,14 @@ namespace ConsoleUI
                                         $"Операция:[{e.Message}]",
                                         $"Сумма:[{e.SumOperation:C2}]",
                                         $"Баланс:[{sender.Sum:C2}]",
+                                        $"Сумма покупок:[{sender.SumBuy:C2}]",
                                         $"Кэшбэк:[{sender.CashBack:C2}]"
 
                 );
             Console.WriteLine(myMessage);
         }
+       
+        
     }
 
 }
