@@ -6,9 +6,9 @@ namespace ConsoleUI
     class Programm
     {
 
-        delegate void Message(string s);
-        delegate void MessageEmpty();
-        delegate int Operation(int x, int y);
+        //delegate void Message(string s);
+        //delegate void MessageEmpty();
+        //delegate int Operation(int x, int y);
         public static void Main()
         {
             System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("ru-RU");
@@ -45,7 +45,7 @@ namespace ConsoleUI
             var myMessage = String.Join("\t",
                                         $"Дата:[{DateTime.Now}]",
                                         $"Сквозной номер транзакции:[{AccountEventArgs.IdOperation}]",
-                                       // $"Номер транзакции по счету:[{e.IdOperationAccount}]",
+                                        $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
                                         $"Cчет:[{e.IdAccount}]",
                                         $"Операция:[{e.Message}]",
                                         $"Сумма:[{e.SumOperation:C2}]",

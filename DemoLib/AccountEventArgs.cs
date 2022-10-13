@@ -10,10 +10,7 @@
         /// </summary>
         public static int IdOperation { get; private set; } = 0;
 
-        ///// <summary>
-        ///// Номер транзакции в пределах счета
-        ///// </summary>
-        //public int IdOperationAccount { get; private set; } = 0;
+       
         
         
         

@@ -9,6 +9,12 @@
     /// </summary>
     public class Account
     {
+
+        /// <summary>
+        /// Номер транзакции в пределах счета
+        /// </summary>
+        public int IdOperationAccount { get; private set; } = 0;
+
         /// <summary>
         /// Баланс клиента
         /// </summary>
@@ -26,6 +32,7 @@
         /// <param name="firstSum">Первоначальная сумма при открытии счета</param>
         public Account(AccountHandlerEvent? NameMetod, decimal firstSum)
         {
+            IdOperationAccount++;
             Notify += NameMetod;
             IdAccount = Guid.NewGuid();
             this.Sum = firstSum;
@@ -53,14 +60,16 @@
         // добавить средства на счет
         public void Add(decimal sum)
         {
+            IdOperationAccount++;
             this.Sum += sum;
             notify?.Invoke(this, new AccountEventArgs($"Добавление средств", sum, IdAccount));
+           
         }
 
         // взять деньги с счета
         public void Take(decimal sum)
         {
-
+            IdOperationAccount++;
             // берем деньги, если на счете достаточно средств иначе отказ в списании
             if (this.Sum >= sum)
             {
