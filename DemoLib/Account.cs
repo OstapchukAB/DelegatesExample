@@ -9,7 +9,18 @@
     /// </summary>
     public class Account
     {
-
+     /// <summary>
+     /// 
+     /// </summary>
+        enum TypeOperation 
+        {
+            CreateAnAccount,
+            DepositMoneyToTheAccount,
+            TakeMoneyFromTheAccount,
+            MakeAPurchase,
+            OperationFailure,
+            MoneyRefund
+        }
         /// <summary>
         /// Номер транзакции в пределах счета
         /// </summary>
@@ -18,7 +29,14 @@
         /// <summary>
         /// Баланс клиента
         /// </summary>
-        public decimal Sum { get; private set; } // Переменная для хранения суммы
+        public decimal Sum { get; private set; } 
+
+        /// <summary>
+        /// Сумма покупок
+        /// </summary>
+        public decimal SumBuy { get; private set; }
+
+        public decimal CashBack { get; private set; }
 
         /// <summary>
         /// Номер счета клиента
@@ -75,11 +93,35 @@
             {
                 this.Sum -= sum;
                 notify?.Invoke(this, new AccountEventArgs($"Списание средств", sum, IdAccount));
+               
             }
             else
             {
                 notify?.Invoke(this, new AccountEventArgs($"Отказ в списании", sum, IdAccount));
             }
         }
+        public void Buy(decimal sum)
+        {
+            IdOperationAccount++;
+           
+            if (this.Sum >= sum)
+            {
+                this.Sum -= sum;
+               
+                this.SumBuy += sum;
+                if (this.SumBuy > 100)
+                {
+                    this.CashBack += this.SumBuy / 100;
+                    this.SumBuy = 0.00M;
+                }
+                notify?.Invoke(this, new AccountEventArgs($"Покупка", sum, IdAccount));
+
+            }
+            else
+            {
+                notify?.Invoke(this, new AccountEventArgs($"Отказ в покупке", sum, IdAccount));
+            }
+        }
+
     }
 }

@@ -10,9 +10,6 @@
         /// </summary>
         public static int IdOperation { get; private set; } = 0;
 
-       
-        
-        
         
         /// <summary>
         /// Номер счета
