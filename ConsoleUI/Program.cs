@@ -42,14 +42,14 @@ namespace ConsoleUI
                 //Console.WriteLine("---");
             }
 
-            void PrintColorMessageGreen(string message)
-            {
-                // Устанавливаем красный цвет символов
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(message);
-                // Сбрасываем настройки цвета
-                Console.ResetColor();
-            }
+            //void PrintColorMessageGreen(string message)
+            //{
+            //    // Устанавливаем красный цвет символов
+            //    Console.ForegroundColor = ConsoleColor.Green;
+            //    Console.WriteLine(message);
+            //    // Сбрасываем настройки цвета
+            //    Console.ResetColor();
+            //}
             void PrintColorMessageRed(string message)
             {
                 // Устанавливаем красный цвет символов
@@ -62,6 +62,7 @@ namespace ConsoleUI
             // создаем банковский счет
             Account account = new Account(PrintSimpleMessage);
             account.Notify += PrintColorMessageRed;
+    
 
             // account.UnregisterHandler(PrintSimpleMessage);
             //  account.RegisterHandler(PrintColorMessageGreen);
@@ -82,7 +83,7 @@ namespace ConsoleUI
             //***************create account 2********
             Account account2 = new Account(PrintSimpleMessage);
             // account2.Notify += PrintColorMessageRed;
-            account2.Notify += (string s) => Console.WriteLine($"---{s}---");
+            account2.Notify += (string s) => Console.WriteLine($"{s}-----------");
 
             // account.UnregisterHandler(PrintSimpleMessage);
             //  account.RegisterHandler(PrintColorMessageGreen);
