@@ -7,7 +7,7 @@
     {
 
         public int IdOperation { get; }
-        public Guid IdAccount { get;}
+        public Guid IdAccount { get; }
 
         // Сообщение 
         public string Message { get; }
@@ -16,12 +16,12 @@
         /// Сумма, на которую изменился счет
         /// </summary>
         public decimal Sum { get; }
-        public AccountEventArgs(string message, decimal sum, Guid _IdAccount,int _idOperation)
+        public AccountEventArgs(string message, decimal sum, Guid _IdAccount, int _idOperation)
         {
             Message = message;
             Sum = sum;
-           IdAccount=_IdAccount;
-            IdOperation = _idOperation; 
+            IdAccount = _IdAccount;
+            IdOperation = _idOperation;
         }
     }
 }
