@@ -35,80 +35,44 @@ namespace ConsoleUI
             //Operation add = (int x, int y) => { return x + y; };
             //msg($"Результат сложения чисел {x} и {y} равно {add(x,y)}");
 
-            void PrintSimpleMessage(string message)
-            {
-                // var uniq = DateTime.Now;
-                Console.WriteLine($"{message}");
-                //Console.WriteLine("---");
-            }
 
-            //void PrintColorMessageGreen(string message)
-            //{
-            //    // Устанавливаем красный цвет символов
-            //    Console.ForegroundColor = ConsoleColor.Green;
-            //    Console.WriteLine(message);
-            //    // Сбрасываем настройки цвета
-            //    Console.ResetColor();
-            //}
-            void PrintColorMessageRed(string message)
-            {
-                // Устанавливаем красный цвет символов
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"{message}");
-                // Сбрасываем настройки цвета
-                Console.ResetColor();
-            }
 
             // создаем банковский счет
-            Account account = new Account(PrintSimpleMessage);
-            account.Notify += PrintColorMessageRed;
-    
-
-            // account.UnregisterHandler(PrintSimpleMessage);
-            //  account.RegisterHandler(PrintColorMessageGreen);
-
-            // Добавляем в делегат ссылку на метод PrintSimpleMessage
-            // account.RegisterHandler(PrintSimpleMessage);
-            //account.taken = PrintSimpleMessage;
-
+           
+            Account account = new Account(Account_Notify, 1.00M);
+           
             account.Add(200.00M);
-
-            // account.UnregisterHandler(PrintColorMessageGreen);
-            // account.RegisterHandler(PrintColorMessageRed);
             // Два раза подряд пытаемся снять деньги
             account.Take(100.00M);
             account.Take(150.00M);
 
 
             //***************create account 2********
-            Account account2 = new Account(PrintSimpleMessage);
-            // account2.Notify += PrintColorMessageRed;
-            account2.Notify += (string s) => Console.WriteLine($"{s}-----------");
+            //Account account2 = new Account(new AccountHandlerEvent(Account_Notify), 0.00M);
+            //account2.Add(500.00M);
 
-            // account.UnregisterHandler(PrintSimpleMessage);
-            //  account.RegisterHandler(PrintColorMessageGreen);
+            //// Два раза подряд пытаемся снять деньги
+            //account2.Take(499.99M);
+            //account2.Take(50.00M);
+            //account2.Add(100.00M);
+            //account2.Take(50.00M);
+            ////********************
 
-            // Добавляем в делегат ссылку на метод PrintSimpleMessage
-            // account.RegisterHandler(PrintSimpleMessage);
-            //account.taken = PrintSimpleMessage;
-
-            account2.Add(500.00M);
-
-            // account.UnregisterHandler(PrintColorMessageGreen);
-            // account.RegisterHandler(PrintColorMessageRed);
-            // Два раза подряд пытаемся снять деньги
-            account2.Take(499.99M);
-            account2.Take(50.00M);
-            account2.Add(100.00M);
-            account2.Take(50.00M);
-            //********************
-
-            Console.WriteLine();
-            Console.Write("Для выхода нажмите любую клавишу");
-            Console.ReadKey();
-            Environment.Exit(-1);
+            //Console.WriteLine();
+            //Console.Write("Для выхода нажмите любую клавишу");
+            //Console.ReadKey();
+            //Environment.Exit(-1);
 
         }
 
+        private static void Account_Notify(Account sender, AccountEventArgs e)
+        {
+            Console.WriteLine("");
+            Console.Write($"Дата:[{DateTime.Now}]\t");
+            Console.Write($"Номер транзакции:[{e.IdOperation}]\tCчет№:[{e.IdAccount}]\tсумма:[{e.Sum}]\t");  
+            Console.Write($"Операция:[{e.Message}]\tБаланс:[{sender.Sum}]");
+
+        }
     }
+    
 }

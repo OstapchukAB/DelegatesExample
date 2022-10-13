@@ -1,37 +1,31 @@
-﻿
-
-namespace DemoLib
+﻿namespace DemoLib
 {
-    /// <summary>
-    /// Делегат
-    /// </summary>
-    /// <param name="message"></param>
+
     public delegate void AccountHandler(string message);
-   
+    public delegate void AccountHandlerEvent(Account sender, AccountEventArgs e);
+
+    /// <summary>
+    /// Аккаунт банковского счета
+    /// </summary>
     public class Account
     {
         public decimal Sum { get; private set; } // Переменная для хранения суммы
-
-        // Создаем переменную делегата
-        public AccountHandler? taken;
-        
-
+    
         //public event AccountHandler? Notify;
         int id { get; set; } =0;
         readonly Guid IdAccount;
 
 
-        public Account(AccountHandler delegat) 
+        public Account(AccountHandlerEvent? _notify, decimal firstSum) 
         {
-            
+            Notify += _notify;  
             IdAccount= Guid.NewGuid();
-            RegisterHandler(delegat);
-            taken?.Invoke("-------------------------------");
-            taken?.Invoke($"{DateTime.Now} {id++} Счет [{IdAccount}] создан. Баланс:{this.Sum:C2}");
+            this.Sum = firstSum; 
+            notify?.Invoke(this, new AccountEventArgs($"Создание счета", firstSum, IdAccount, id++));
         }
-        
-        AccountHandler? notify;
-        public event AccountHandler? Notify
+
+        AccountHandlerEvent? notify;
+        public event AccountHandlerEvent? Notify
         {
             add
             {
@@ -45,43 +39,28 @@ namespace DemoLib
             }
         }
 
-        //// Регистрируем делегат
-        public void RegisterHandler(AccountHandler delegat)
-        {
-            taken = delegat;
-        }
-        public void UnregisterHandler(AccountHandler delegat)
-        {
-            taken -= delegat; // удаляем делегат
-        }
+      
 
         // добавить средства на счет
         public void Add(decimal sum) 
-        {
-            notify?.Invoke($"{DateTime.Now} {id++} Внимание! Попытка положить средства на счет [{IdAccount}]");
+        {         
             this.Sum += sum;
-
-            taken?.Invoke($"{DateTime.Now} {id++} На счет положена сумма {sum:C2}. Баланс:{this.Sum:C2}");
+           notify?.Invoke(this, new AccountEventArgs($"Добавление средств",sum, IdAccount,id++));
         }
         
         // взять деньги с счета
         public void Take(decimal sum)
         {
-            notify?.Invoke($"{DateTime.Now} {id++}  Внимание! Попытка снять средства со счёта [{IdAccount}]");
-            taken?.Invoke($"{DateTime.Now} {id++}  Списать со счета :{sum:C2}");
-            // берем деньги, если на счете достаточно средств
+          
+            // берем деньги, если на счете достаточно средств иначе отказ в списании
             if (this.Sum >= sum)
             {
-                //Console.WriteLine($"Со счета списано {sum} у.е.");
                 this.Sum -= sum;
-                // вызываем делегат, передавая ему сообщение
-                taken?.Invoke($"{DateTime.Now} {id++}  Со счета списано {sum:C2}. Баланс:{this.Sum:C2}");
-                notify?.Invoke($"{DateTime.Now} {id++}  Внимание!  Списание средств со счета [{IdAccount}] произведено");
+                notify?.Invoke(this, new AccountEventArgs($"Списание средств", sum, IdAccount, id++));
             }
             else
             {
-                notify?.Invoke($"{DateTime.Now} {id++}  Внимание!  Неудачная попытка снять средства со счета [{IdAccount}]");
-                taken?.Invoke($"{DateTime.Now} {id++}  Недостаточно средств. Баланс:{this.Sum}");
+                notify?.Invoke(this, new AccountEventArgs($"Отказ в списании", sum, IdAccount, id++));
             }
         }
     }
