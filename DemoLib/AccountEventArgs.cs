@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DelegatesExample
+namespace DemoLib
 {
-    class AccountEventArgs
+    public class AccountEventArgs
     {
 
         // Сообщение 

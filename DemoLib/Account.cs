@@ -1,6 +1,6 @@
-﻿using System;
+﻿
 
-namespace DelegatesExample
+namespace DemoLib
 {
     /// <summary>
     /// Делегат
@@ -8,7 +8,7 @@ namespace DelegatesExample
     /// <param name="message"></param>
     public delegate void AccountHandler(string message);
    
-    class Account
+    public class Account
     {
         public decimal Sum { get; private set; } // Переменная для хранения суммы
 
