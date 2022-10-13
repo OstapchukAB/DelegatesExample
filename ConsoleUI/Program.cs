@@ -5,10 +5,6 @@ namespace ConsoleUI
 
     class Programm
     {
-
-        //delegate void Message(string s);
-        //delegate void MessageEmpty();
-        //delegate int Operation(int x, int y);
         public static void Main()
         {
             System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("ru-RU");
