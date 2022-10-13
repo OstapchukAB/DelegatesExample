@@ -5,23 +5,39 @@
     /// </summary>
     public class AccountEventArgs
     {
+        /// <summary>
+        /// Сквозной номер транзакции
+        /// </summary>
+        public static int IdOperation { get; private set; } = 0;
 
-        public int IdOperation { get; }
+        ///// <summary>
+        ///// Номер транзакции в пределах счета
+        ///// </summary>
+        //public int IdOperationAccount { get; private set; } = 0;
+        
+        
+        
+        /// <summary>
+        /// Номер счета
+        /// </summary>
         public Guid IdAccount { get; }
 
-        // Сообщение 
+        /// <summary>
+        /// Название операции
+        /// </summary>
         public string Message { get; }
 
         /// <summary>
-        /// Сумма, на которую изменился счет
+        /// Сумма операции
         /// </summary>
-        public decimal Sum { get; }
-        public AccountEventArgs(string message, decimal sum, Guid _IdAccount, int _idOperation)
+        public decimal SumOperation { get; }
+        public AccountEventArgs(string NameOperation, decimal SumOperation, Guid IdAccount)
         {
-            Message = message;
-            Sum = sum;
-            IdAccount = _IdAccount;
-            IdOperation = _idOperation;
+            this.Message = NameOperation;
+            this.SumOperation = SumOperation;
+            this.IdAccount = IdAccount;
+            IdOperation++;
+            //IdOperationAccount++;
         }
     }
 }

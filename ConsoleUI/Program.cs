@@ -44,10 +44,11 @@ namespace ConsoleUI
         {
             var myMessage = String.Join("\t",
                                         $"Дата:[{DateTime.Now}]",
-                                        $"Номер транзакции:[{e.IdOperation}]",
+                                        $"Сквозной номер транзакции:[{AccountEventArgs.IdOperation}]",
+                                       // $"Номер транзакции по счету:[{e.IdOperationAccount}]",
                                         $"Cчет:[{e.IdAccount}]",
                                         $"Операция:[{e.Message}]",
-                                        $"Сумма:[{e.Sum:C2}]",
+                                        $"Сумма:[{e.SumOperation:C2}]",
                                         $"Баланс:[{sender.Sum:C2}]"
                 );
             Console.WriteLine(myMessage);

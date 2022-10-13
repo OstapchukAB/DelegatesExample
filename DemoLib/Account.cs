@@ -9,23 +9,28 @@
     /// </summary>
     public class Account
     {
+        /// <summary>
+        /// Баланс клиента
+        /// </summary>
         public decimal Sum { get; private set; } // Переменная для хранения суммы
 
-        //public event AccountHandler? Notify;
         /// <summary>
-        /// сквозной номер транзакции
+        /// Номер счета клиента
         /// </summary>
-        static int Id { get; set; } = 0;
         readonly Guid IdAccount;
 
-
-        public Account(AccountHandlerEvent? _notify, decimal firstSum)
+        /// <summary>
+        /// Создание счета
+        /// </summary>
+        /// <param name="NameMetod">Имя метода для регистрации событий</param>
+        /// <param name="firstSum">Первоначальная сумма при открытии счета</param>
+        public Account(AccountHandlerEvent? NameMetod, decimal firstSum)
         {
-            Notify += _notify;
+            Notify += NameMetod;
             IdAccount = Guid.NewGuid();
             this.Sum = firstSum;
 
-            notify?.Invoke(this, new AccountEventArgs($"Создание счета", firstSum, IdAccount, Id++));
+            notify?.Invoke(this, new AccountEventArgs($"Создание счета", firstSum, IdAccount));
         }
 
         AccountHandlerEvent? notify;
@@ -49,7 +54,7 @@
         public void Add(decimal sum)
         {
             this.Sum += sum;
-            notify?.Invoke(this, new AccountEventArgs($"Добавление средств", sum, IdAccount, Id++));
+            notify?.Invoke(this, new AccountEventArgs($"Добавление средств", sum, IdAccount));
         }
 
         // взять деньги с счета
@@ -60,11 +65,11 @@
             if (this.Sum >= sum)
             {
                 this.Sum -= sum;
-                notify?.Invoke(this, new AccountEventArgs($"Списание средств", sum, IdAccount, Id++));
+                notify?.Invoke(this, new AccountEventArgs($"Списание средств", sum, IdAccount));
             }
             else
             {
-                notify?.Invoke(this, new AccountEventArgs($"Отказ в списании", sum, IdAccount, Id++));
+                notify?.Invoke(this, new AccountEventArgs($"Отказ в списании", sum, IdAccount));
             }
         }
     }
