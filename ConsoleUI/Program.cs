@@ -1,9 +1,10 @@
 ﻿using DemoLib;
+using System.Runtime.CompilerServices;
 
 namespace ConsoleUI
 {
 
-    class Programm
+    class Program
     {
         public static void Main()
         {
@@ -20,9 +21,9 @@ namespace ConsoleUI
 
 
             //***************create account 2 * *******
-            Account account2 = new Account(Account_Notify, 0.00M);
+            Account account2 = new Account(new Program().Account_Notify, 0.00M);
             account2.Add(500.00M);
-            account2.AlgCashBack += Account2_AlgCashBack;
+            account2.AlgCashBack += new Program().Account2_AlgCashBack;
 
             account2.Buy(200.00M);
 
@@ -49,7 +50,7 @@ namespace ConsoleUI
         /// </summary>
         /// <param name="sumBuy"></param>
         /// <returns></returns>
-        private static decimal Account2_AlgCashBack(decimal sumBuy)
+        private  decimal Account2_AlgCashBack(decimal sumBuy)
         {
             if (sumBuy > 500M)
                 return 0.10M;
@@ -59,7 +60,7 @@ namespace ConsoleUI
                 return 0.00M;
         }
 
-        private static void Account_Notify(Account sender, AccountEventArgs e)
+        private  void Account_Notify(Account sender, AccountEventArgs e)
         {
             var myMessage = String.Join("  ",
                                        // $"Дата:[{DateTime.Now}]",
@@ -74,6 +75,7 @@ namespace ConsoleUI
 
                 );
             Console.WriteLine(myMessage);
+           
         }
        
         
