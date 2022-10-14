@@ -58,7 +58,7 @@ public partial class Form1 : Form
 
             );
 
-        this.listView1.Items.Add(myMessage);  
+       
      
     }
     private decimal Account2_AlgCashBack(decimal sumBuy)

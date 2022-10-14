@@ -8,12 +8,12 @@
     /// <summary>
     /// Аккаунт банковского счета
     /// </summary>
-    public class Account
+    public class Account : IAccount
     {
-     /// <summary>
-     /// 
-     /// </summary>
-        enum TypeOperation 
+        /// <summary>
+        /// 
+        /// </summary>
+        enum TypeOperation
         {
             CreateAnAccount,
             DepositMoneyToTheAccount,
@@ -30,7 +30,7 @@
         /// <summary>
         /// Баланс клиента
         /// </summary>
-        public decimal Sum { get; private set; } 
+        public decimal Sum { get; private set; }
 
         /// <summary>
         /// Сумма покупок
@@ -96,7 +96,7 @@
             IdOperationAccount++;
             this.Sum += sum;
             notify?.Invoke(this, new AccountEventArgs($"Добавление средств", sum, IdAccount));
-           
+
         }
 
         // взять деньги с счета
@@ -108,7 +108,7 @@
             {
                 this.Sum -= sum;
                 notify?.Invoke(this, new AccountEventArgs($"Списание средств", sum, IdAccount));
-               
+
             }
             else
             {
@@ -118,11 +118,11 @@
         public void Buy(decimal sum)
         {
             IdOperationAccount++;
-           
+
             if (this.Sum >= sum)
             {
                 this.Sum -= sum;
-               
+
                 this.SumBuy += sum;
 
                 notify?.Invoke(this, new AccountEventArgs($"Покупка", sum, IdAccount));
@@ -130,7 +130,7 @@
                 var CurentCachBack = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy) ?? 0.00M);
                 if (CurentCachBack > 0)
                 {
-                    
+
                     this.CashBack = this.CashBack + CurentCachBack;
                     this.SumBuy = 0;
                     notify?.Invoke(this, new AccountEventArgs($"Вам начислен кэшбэк", CurentCachBack, IdAccount));
@@ -140,7 +140,7 @@
                 //    this.CashBack += this.SumBuy / 100;
                 //    this.SumBuy = 0.00M;
                 //}
-               
+
 
             }
             else

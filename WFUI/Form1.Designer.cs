@@ -29,11 +29,12 @@ partial class Form1
     private void InitializeComponent()
     {
             this.button1 = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -44,15 +45,6 @@ partial class Form1
             this.button1.TabIndex = 0;
             this.button1.Text = "Create Account";
             this.button1.UseVisualStyleBackColor = true;
-
-            // 
-            // listView1
-            // 
-            this.listView1.Location = new System.Drawing.Point(222, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(642, 372);
-            this.listView1.TabIndex = 1;
-            this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // button2
             // 
@@ -62,7 +54,6 @@ partial class Form1
             this.button2.TabIndex = 2;
             this.button2.Text = "Add Money";
             this.button2.UseVisualStyleBackColor = true;
-
             // 
             // button3
             // 
@@ -89,19 +80,29 @@ partial class Form1
             this.textBox1.Size = new System.Drawing.Size(172, 27);
             this.textBox1.TabIndex = 5;
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(225, 12);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.Height = 29;
+            this.dataGridView1.Size = new System.Drawing.Size(639, 405);
+            this.dataGridView1.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(876, 447);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.listView1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,9 +111,9 @@ partial class Form1
     #endregion
 
     private Button button1;
-    private ListView listView1;
     private Button button2;
     private Button button3;
     private Button button4;
     private TextBox textBox1;
+    private DataGridView dataGridView1;
 }

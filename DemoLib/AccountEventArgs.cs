@@ -3,14 +3,14 @@
     /// <summary>
     /// Класс событий передающий информацию о движении средств по счету
     /// </summary>
-    public class AccountEventArgs
+    public class AccountEventArgs : IAccountEventArgs
     {
         /// <summary>
         /// Сквозной номер транзакции
         /// </summary>
         public static int IdOperation { get; private set; } = 0;
 
-        
+
         /// <summary>
         /// Номер счета
         /// </summary>
