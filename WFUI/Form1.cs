@@ -1,5 +1,6 @@
 using DemoLib;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -11,14 +12,14 @@ public partial class Form1 : Form
 {
     List<AccountEvents> ListAccEvents { get; set; }
     Account _Account { get; set; }
-    public delegate void GridGui<T>(object o, List<T> lst);
+    public delegate void GridGui<T>(DataGridView  grd, List<T> lst);
     GridGui<AccountEvents> grid;
 
 
     public Form1()
     {
         InitializeComponent();
-        grid = GridRefresh;
+        grid += GridRefresh;
        
         ListAccEvents = new List<AccountEvents>();
         grid(dataGridView1, ListAccEvents);
@@ -58,7 +59,7 @@ public partial class Form1 : Form
             else
                 return;
 
-
+           
 
         }
 
@@ -102,18 +103,16 @@ public partial class Form1 : Form
 
    
 
-    void GridRefresh<T>(object ob,List<T> lst) 
+    void GridRefresh<T>(DataGridView grd,List<T> lst) 
     {
-        if (ob == null)
+        if (grd == null)
             return;
-
-        if (ob is DataGridView grid) 
-        {
 
             Action action = () =>
             {
-               grid.DataSource = lst;
-              // grid.Refresh();
+                var grdList = new BindingList<T>(lst);
+                grd.DataSource = grdList;
+                // grid.Refresh();
             };
             if (InvokeRequired)
                 BeginInvoke(action);
@@ -121,6 +120,5 @@ public partial class Form1 : Form
                 action();
         }
 
-    }
    
 }
