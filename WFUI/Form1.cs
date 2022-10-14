@@ -7,23 +7,43 @@ namespace WFUI;
 
 public partial class Form1 : Form
 {
+    List<AccountEvents> ListAccEvents { get; set; }
+    Account _Account { get; set; }
     public Form1()
     {
         InitializeComponent();
-        this.Controls.OfType<Button>().ToList().ForEach(x=>x.Click += new EventHandler(Button_Click)); 
+        dataGridView1.Parent = this.splitContainer1.Panel2;     
+        ListAccEvents = new List<AccountEvents>();
+        dataGridView1.DataSource = ListAccEvents;
+         
+        this.Controls.OfType<Button>().ToList().ForEach(x=>x.Click += new EventHandler(Button_Click));
+         
     }
 
-    Account account;
+   
     private void Button_Click(object? sender, EventArgs e)
     {
+       
         if (sender == null)
             return;
         if (sender is Button btn)
         {
             if (btn.Text.Equals("Create Account"))
             { 
-            account = new Account(this.Account_Notify, 0.00M);
-            account.AlgCashBack += this.Account2_AlgCashBack;
+            
+                
+                
+            _Account = new Account(this.Account_Notify, 0.00M);
+            _Account.AlgCashBack += (decimal sumBuy) =>
+                {
+                    if (sumBuy > 500M)
+                        return 0.10M;
+                    else if (sumBuy > 100M)
+                        return 0.01M;
+                    else
+                        return 0.00M;
+                };
+                
                 return;
             }
 
@@ -31,7 +51,7 @@ public partial class Form1 : Form
             {
                 Decimal money=0.00M;
                 if(Decimal.TryParse(textBox1.Text, out money))
-                        account.Add(money);
+                        _Account.Add(money);
                 return;
             }
 
@@ -45,8 +65,8 @@ public partial class Form1 : Form
 
     private void Account_Notify(Account sender, AccountEventArgs e)
     {
-        account.ListAccEvents.Add(new AccountEvents(
-              idOperation: AccountEventArgs.IdOperation,
+        ListAccEvents.Add(new AccountEvents(
+              idOperation: e.IdOperation,
               idOperationAccount: sender.IdOperationAccount,
               idAccount:e.IdAccount,
               message:e.Message,
@@ -72,15 +92,7 @@ public partial class Form1 : Form
 
 
     }
-    private decimal Account2_AlgCashBack(decimal sumBuy)
-    {
-        if (sumBuy > 500M)
-            return 0.10M;
-        else if (sumBuy > 100M)
-            return 0.01M;
-        else
-            return 0.00M;
-    }
+   
 
    
 }

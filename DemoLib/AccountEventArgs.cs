@@ -8,7 +8,7 @@
         /// <summary>
         /// Сквозной номер транзакции
         /// </summary>
-        public static int IdOperation { get; private set; } = 0;
+        public int IdOperation { get; private set; } = 0;
 
 
         /// <summary>

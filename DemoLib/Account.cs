@@ -12,7 +12,7 @@
     public class Account : IAccount
     {
 
-        public List<AccountEvents> ListAccEvents { get; set; } = new List<AccountEvents>();
+       // public List<AccountEvents> ListAccEvents { get; set; } = new List<AccountEvents>();
         /// <summary>
         /// 
         /// </summary>
