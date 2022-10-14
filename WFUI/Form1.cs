@@ -41,10 +41,12 @@ public partial class Form1 : Form
                 _Account = new Account(this.Account_Notify, 0.00M);
                 _Account.AlgCashBack += (decimal sumBuy) =>
                     {
-                        if (sumBuy > 500M)
+                        if (sumBuy > 100M)
                             return 0.10M;
-                        else if (sumBuy > 100M)
+                        else if (sumBuy <= 100M)
                             return 0.01M;
+                        else if (sumBuy > 1000M)
+                            return 0.2M;
                         else
                             return 0.00M;
                     };
@@ -54,7 +56,24 @@ public partial class Form1 : Form
             {
                 Decimal money = 0.00M;
                 if (Decimal.TryParse(textBox1.Text, out money))
-                    _Account.Add(money);
+                    if (money > 0)
+                        _Account.Add(money);
+            }
+            else if (btn.Text.Equals("Take Money"))
+            {
+                Decimal money = 0.00M;
+                if (Decimal.TryParse(textBox1.Text, out money))
+                    if(money >0)
+                    _Account.Take(money);
+            }
+            else if (btn.Text.Equals("Buy"))
+            {
+                Decimal money = 0.00M;
+                if (Decimal.TryParse(textBox1.Text, out money))
+                {
+                    if (money>0)
+                    _Account.Buy(money);
+                }
             }
             else
                 return;
@@ -70,7 +89,7 @@ public partial class Form1 : Form
     private void Account_Notify(Account sender, AccountEventArgs e)
     {
         ListAccEvents.Add(new AccountEvents(
-              idOperation: e.IdOperation,
+              idOperation: AccountEventArgs.IdOperation,
               idOperationAccount: sender.IdOperationAccount,
               idAccount: e.IdAccount,
               message: e.Message,

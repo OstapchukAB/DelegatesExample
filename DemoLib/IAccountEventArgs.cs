@@ -2,7 +2,7 @@
 {
     public interface IAccountEventArgs
     {
-       int IdOperation { get; }
+       static int IdOperation { get; }
         Guid IdAccount { get; }
         string Message { get; }
         decimal SumOperation { get; }
