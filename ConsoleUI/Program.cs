@@ -69,7 +69,7 @@ namespace ConsoleUI
                                         $"Cчет:[{e.IdAccount}]",
                                         $"Операция:[{e.Message}]",
                                         $"Сумма:[{e.SumOperation:C2}]",
-                                        $"Баланс:[{sender.Sum:C2}]",
+                                        $"Баланс:[{sender.SumAccount:C2}]",
                                         $"Сумма покупок:[{sender.SumBuy:C2}]",
                                         $"Общий кэшбэк:[{sender.CashBack:C2}]"
 

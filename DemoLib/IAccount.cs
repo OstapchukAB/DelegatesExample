@@ -4,7 +4,7 @@
     {
         decimal CashBack { get; }
         int IdOperationAccount { get; }
-        decimal Sum { get; }
+        decimal SumAccount { get; }
         decimal SumBuy { get; }
     }
 }

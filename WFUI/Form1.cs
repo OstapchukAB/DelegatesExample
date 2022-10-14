@@ -45,21 +45,32 @@ public partial class Form1 : Form
 
     private void Account_Notify(Account sender, AccountEventArgs e)
     {
-        var myMessage = String.Join("  ",
-                                    // $"Дата:[{DateTime.Now}]",
-                                    $"Сквозной номер транзакции:[{AccountEventArgs.IdOperation}]",
-                                    $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
-                                    $"Cчет:[{e.IdAccount}]",
-                                    $"Операция:[{e.Message}]",
-                                    $"Сумма:[{e.SumOperation:C2}]",
-                                    $"Баланс:[{sender.Sum:C2}]",
-                                    $"Сумма покупок:[{sender.SumBuy:C2}]",
-                                    $"Общий кэшбэк:[{sender.CashBack:C2}]"
+        account.ListAccEvents.Add(new AccountEvents(
+              idOperation: AccountEventArgs.IdOperation,
+              idOperationAccount: sender.IdOperationAccount,
+              idAccount:e.IdAccount,
+              message:e.Message,
+              sumOperation:e.SumOperation,
+              sumAccount:sender.SumAccount,
+              sumBuy: sender.SumBuy,
+              cashBack: sender.CashBack
+            ) );
+        //var myMessage = String.Join("  ",
+        //                            // $"Дата:[{DateTime.Now}]",
+        //                            $"Сквозной номер транзакции:[{AccountEventArgs.IdOperation}]",
+        //                            $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
+        //                            $"Cчет:[{e.IdAccount}]",
+        //                            $"Операция:[{e.Message}]",
+        //                            $"Сумма:[{e.SumOperation:C2}]",
+        //                            $"Баланс:[{sender.SumAccount:C2}]",
+        //                            $"Сумма покупок:[{sender.SumBuy:C2}]",
+        //                            $"Общий кэшбэк:[{sender.CashBack:C2}]"
 
-            );
+        //    );
 
-       
-     
+
+
+
     }
     private decimal Account2_AlgCashBack(decimal sumBuy)
     {

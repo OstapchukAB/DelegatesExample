@@ -4,12 +4,15 @@
     public delegate void AccountHandler(string message);
     public delegate decimal AccountAlgoritmCashBack(decimal sumBuy);
     public delegate void AccountHandlerEvent(Account sender, AccountEventArgs e);
+   
 
     /// <summary>
     /// Аккаунт банковского счета
     /// </summary>
     public class Account : IAccount
     {
+
+        public List<AccountEvents> ListAccEvents { get; set; } = new List<AccountEvents>();
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +33,7 @@
         /// <summary>
         /// Баланс клиента
         /// </summary>
-        public decimal Sum { get; private set; }
+        public decimal SumAccount { get; private set; }
 
         /// <summary>
         /// Сумма покупок
@@ -54,7 +57,7 @@
             IdOperationAccount++;
             Notify += NameMetod;
             IdAccount = Guid.NewGuid();
-            this.Sum = firstSum;
+            this.SumAccount = firstSum;
 
             notify?.Invoke(this, new AccountEventArgs($"Создание счета", firstSum, IdAccount));
         }
@@ -94,7 +97,7 @@
         public void Add(decimal sum)
         {
             IdOperationAccount++;
-            this.Sum += sum;
+            this.SumAccount += sum;
             notify?.Invoke(this, new AccountEventArgs($"Добавление средств", sum, IdAccount));
 
         }
@@ -104,9 +107,9 @@
         {
             IdOperationAccount++;
             // берем деньги, если на счете достаточно средств иначе отказ в списании
-            if (this.Sum >= sum)
+            if (this.SumAccount >= sum)
             {
-                this.Sum -= sum;
+                this.SumAccount -= sum;
                 notify?.Invoke(this, new AccountEventArgs($"Списание средств", sum, IdAccount));
 
             }
@@ -119,9 +122,9 @@
         {
             IdOperationAccount++;
 
-            if (this.Sum >= sum)
+            if (this.SumAccount >= sum)
             {
-                this.Sum -= sum;
+                this.SumAccount -= sum;
 
                 this.SumBuy += sum;
 
