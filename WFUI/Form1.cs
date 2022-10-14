@@ -83,19 +83,19 @@ public partial class Form1 : Form
        
         grid(dataGridView1, ListAccEvents);
 
-         var myMessage = String.Join("  ",
-                                    // $"Дата:[{DateTime.Now}]",
-                                    $"Сквозной номер транзакции:[{e.IdOperation}]",
-                                    $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
-                                    $"Cчет:[{e.IdAccount}]",
-                                    $"Операция:[{e.Message}]",
-                                    $"Сумма:[{e.SumOperation:C2}]",
-                                    $"Баланс:[{sender.SumAccount:C2}]",
-                                    $"Сумма покупок:[{sender.SumBuy:C2}]",
-                                    $"Общий кэшбэк:[{sender.CashBack:C2}]"
+        // var myMessage = String.Join("  ",
+        //                            // $"Дата:[{DateTime.Now}]",
+        //                            $"Сквозной номер транзакции:[{e.IdOperation}]",
+        //                            $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
+        //                            $"Cчет:[{e.IdAccount}]",
+        //                            $"Операция:[{e.Message}]",
+        //                            $"Сумма:[{e.SumOperation:C2}]",
+        //                            $"Баланс:[{sender.SumAccount:C2}]",
+        //                            $"Сумма покупок:[{sender.SumBuy:C2}]",
+        //                            $"Общий кэшбэк:[{sender.CashBack:C2}]"
 
-            );
-        MessageBox.Show(myMessage);
+        //    );
+        //MessageBox.Show(myMessage);
 
        
     }
@@ -103,15 +103,22 @@ public partial class Form1 : Form
 
    
 
-    void GridRefresh<T>(DataGridView grd,List<T> lst) 
+    void GridRefresh<T>(DataGridView MyGrid, List<T> lst) 
     {
-        if (grd == null)
+        if (MyGrid == null)
             return;
 
             Action action = () =>
             {
                 var grdList = new BindingList<T>(lst);
-                grd.DataSource = grdList;
+                MyGrid.DataSource = grdList;
+                MyGrid.AllowUserToAddRows = false;
+                MyGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+                MyGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                MyGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                MyGrid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+
                 // grid.Refresh();
             };
             if (InvokeRequired)
