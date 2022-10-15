@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace DemoLib
 {
@@ -21,17 +16,7 @@ namespace DemoLib
             Message = message;
         }
 
-        // $"Дата:[{DateTime.Now}]",
-        //                            $"Сквозной номер транзакции:[{AccountEventArgs.IdOperation}]",
-        //                            $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
-        //                            $"Cчет:[{e.IdAccount}]",
-        //                            $"Операция:[{e.Message}]",
-        //                            $"Сумма:[{e.SumOperation:C2}]",
-        //                            $"Баланс:[{sender.SumAccount:C2}]",
-        //                            $"Сумма покупок:[{sender.SumBuy:C2}]",
-        //                            $"Общий кэшбэк:[{sender.CashBack:C2}]"
-
-       
+            
         
         [DisplayName("Сквозной номер транзакции")]
         public int IdOperation { get; set; }

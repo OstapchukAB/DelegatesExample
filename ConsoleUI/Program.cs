@@ -64,7 +64,7 @@ namespace ConsoleUI
         {
             var myMessage = String.Join("  ",
                                        // $"Дата:[{DateTime.Now}]",
-                                        $"Сквозной номер транзакции:[{e.IdOperation}]",
+                                        $"Сквозной номер транзакции:[{AccountEventArgs.IdOperation}]",
                                         $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
                                         $"Cчет:[{e.IdAccount}]",
                                         $"Операция:[{e.Message}]",

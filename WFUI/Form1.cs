@@ -11,20 +11,24 @@ namespace WFUI;
 public partial class Form1 : Form
 {
     List<AccountEvents> ListAccEvents { get; set; }
-    Account _Account { get; set; }
+    Account? _Account { get; set; }
     public delegate void GridGui<T>(DataGridView  grd, List<T> lst);
-    GridGui<AccountEvents> grid;
+    GridGui<AccountEvents> Grid;
+    List<Account> ListAccount { get; set; }
+    BindingSource BindCombo => new BindingSource();
 
 
     public Form1()
     {
         InitializeComponent();
-        grid += GridRefresh;
-       
+        Grid += GridRefresh;
+        ListAccount = new List<Account>();
+
         ListAccEvents = new List<AccountEvents>();
-        grid(dataGridView1, ListAccEvents);
+        Grid(dataGridView1, ListAccEvents);
 
         this.Controls.OfType<Button>().ToList().ForEach(x => x.Click += new EventHandler(Buttons_Click));
+       
 
     }
 
@@ -39,6 +43,8 @@ public partial class Form1 : Form
             if (btn.Text.Equals("Create Account"))
             {
                 _Account = new Account(this.Account_Notify, 0.00M);
+                ListAccount.Add(_Account);
+                GuiComboBoxRefresh(this.comboBox1, ListAccount);
                 _Account.AlgCashBack += (decimal sumBuy) =>
                     {
                         if (sumBuy > 100M)
@@ -50,21 +56,28 @@ public partial class Form1 : Form
                         else
                             return 0.00M;
                     };
+                return;
             }
 
-            else if (btn.Text.Equals("Add Money"))
+            if (_Account ==null)
+                return;
+            Account ac = (Account)comboBox1.SelectedValue; 
+            if (ac==null)
+                return;
+
+            if (btn.Text.Equals("Add Money"))
             {
                 Decimal money = 0.00M;
                 if (Decimal.TryParse(textBox1.Text, out money))
                     if (money > 0)
-                        _Account.Add(money);
+                        ac.Add(money);
             }
             else if (btn.Text.Equals("Take Money"))
             {
                 Decimal money = 0.00M;
                 if (Decimal.TryParse(textBox1.Text, out money))
                     if(money >0)
-                    _Account.Take(money);
+                    ac.Take(money);
             }
             else if (btn.Text.Equals("Buy"))
             {
@@ -72,7 +85,7 @@ public partial class Form1 : Form
                 if (Decimal.TryParse(textBox1.Text, out money))
                 {
                     if (money>0)
-                    _Account.Buy(money);
+                    ac.Buy(money);
                 }
             }
             else
@@ -100,7 +113,7 @@ public partial class Form1 : Form
             ));
 
        
-        grid(dataGridView1, ListAccEvents);
+        Grid(dataGridView1, ListAccEvents);
 
         // var myMessage = String.Join("  ",
         //                            // $"Дата:[{DateTime.Now}]",
@@ -138,13 +151,43 @@ public partial class Form1 : Form
                 MyGrid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
 
-                // grid.Refresh();
+                // Grid.Refresh();
             };
             if (InvokeRequired)
                 BeginInvoke(action);
             else
                 action();
-        }
+    }
 
-   
+
+    void GuiComboBoxRefresh(object ob, List<Account> lst)
+    {
+        if (ob == null)
+            return;
+        Action action = () =>
+        {
+            if (ob is ComboBox comb)
+            {
+                // var bindingSource1 = new BindingSource();
+                BindCombo.DataSource = lst;
+
+                comb.DataSource = BindCombo.DataSource;
+
+                comb.DisplayMember = "IdAccount";
+                comb.ValueMember = "IdAccount";
+                comb.Refresh();
+            }
+
+
+
+        };
+        if (InvokeRequired)
+            BeginInvoke(action);
+        else
+            action();
+
+
+    }
+
+
 }

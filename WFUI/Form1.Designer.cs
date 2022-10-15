@@ -34,50 +34,56 @@ partial class Form1
             this.button4 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(23, 25);
+            this.button1.Location = new System.Drawing.Point(20, 19);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(172, 37);
+            this.button1.Size = new System.Drawing.Size(150, 28);
             this.button1.TabIndex = 0;
             this.button1.Text = "Create Account";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(23, 79);
+            this.button2.Location = new System.Drawing.Point(20, 59);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(172, 37);
+            this.button2.Size = new System.Drawing.Size(150, 28);
             this.button2.TabIndex = 2;
             this.button2.Text = "Add Money";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(23, 132);
+            this.button3.Location = new System.Drawing.Point(20, 99);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(172, 37);
+            this.button3.Size = new System.Drawing.Size(150, 28);
             this.button3.TabIndex = 3;
             this.button3.Text = "Take Money";
             this.button3.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(23, 184);
+            this.button4.Location = new System.Drawing.Point(20, 138);
+            this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(172, 37);
+            this.button4.Size = new System.Drawing.Size(150, 28);
             this.button4.TabIndex = 4;
             this.button4.Text = "Buy";
             this.button4.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(23, 244);
+            this.textBox1.Location = new System.Drawing.Point(20, 183);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(172, 27);
+            this.textBox1.Size = new System.Drawing.Size(151, 23);
             this.textBox1.TabIndex = 5;
             // 
             // dataGridView1
@@ -86,23 +92,35 @@ partial class Form1
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(201, 25);
+            this.dataGridView1.Location = new System.Drawing.Point(176, 19);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(1094, 419);
+            this.dataGridView1.Size = new System.Drawing.Size(957, 314);
             this.dataGridView1.TabIndex = 6;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(20, 232);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(150, 23);
+            this.comboBox1.TabIndex = 7;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1312, 467);
+            this.ClientSize = new System.Drawing.Size(1148, 350);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button4);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -119,4 +137,5 @@ partial class Form1
     private Button button4;
     private TextBox textBox1;
     private DataGridView dataGridView1;
+    private ComboBox comboBox1;
 }
