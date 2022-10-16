@@ -1,10 +1,5 @@
 using DemoLib;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SqlTypes;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using static WFUI.Form1;
 
 namespace WFUI;
 
@@ -12,12 +7,12 @@ public partial class Form1 : Form
 {
     List<AccountEvents> ListAccEvents { get; set; }
     Account? _Account { get; set; }
-    public delegate void GridGui<T>(DataGridView  grd, List<T> lst);
+    public delegate void GridGui<T>(DataGridView  grd, List<T> lst,Account? ac);
     GridGui<AccountEvents> Grid;
     
 
-    public delegate void GuiRefresh<T>(object ob, List<T> lst);
-    GuiRefresh<Account> Gui;
+    public delegate void GuiRefresh<T>(object ob, List<T> lst, Account? ac);
+    GuiRefresh<Account> GuiComboBox;
     List<Account> ListAccount { get; set; }
     
     //BindingSource BindCombo => new();
@@ -25,25 +20,39 @@ public partial class Form1 : Form
 
     public Form1()
     {
+       
         InitializeComponent();
+        this.Text = "Демо версия банк-клиент";
         Grid += GridRefresh;
-        Gui += ComboRefresh;
+        GuiComboBox += ComboRefresh;
+        this.comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;  
         ListAccount = new List<Account>();
 
         ListAccEvents = new List<AccountEvents>();
-        Grid(dataGridView1, ListAccEvents);
+        Grid(dataGridView1, ListAccEvents,null);
 
         this.Controls.OfType<Button>().ToList().ForEach(x => x.Click += new EventHandler(Buttons_Click));
-        Gui(this.comboBox1, ListAccount);
+        GuiComboBox(this.comboBox1, ListAccount,null);
 
     }
 
-   
+    private void ComboBox1_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        Guid guid = (Guid)comboBox1.SelectedValue;
+        var acResult = ListAccount.Where(x => x.IdAccount.Equals(guid)).FirstOrDefault();
+        if (acResult == null)
+            return;
+        Account ac = (Account)acResult;
 
-    
+        Grid(dataGridView1, ListAccEvents, ac);
+    }
 
     private void Buttons_Click(object? sender, EventArgs e)
     {
+        var moneyTxt = "";
+        if (textBox1.Text.Length > 0)
+            moneyTxt = textBox1.Text;
+        textBox1.Text = "";
 
         if (sender == null)
             return;
@@ -53,7 +62,7 @@ public partial class Form1 : Form
             {
                 _Account = new Account(this.Account_Notify, 0.00M);
                 ListAccount.Add(_Account);
-                Gui(this.comboBox1, ListAccount);
+                GuiComboBox(this.comboBox1, ListAccount,_Account);
                 _Account.AlgCashBack += (decimal sumBuy) =>
                     {
                         if (sumBuy > 100M)
@@ -80,21 +89,21 @@ public partial class Form1 : Form
             if (btn.Text.Equals("Add Money"))
             {
                 Decimal money = 0.00M;
-                if (Decimal.TryParse(textBox1.Text, out money))
+                if (Decimal.TryParse(moneyTxt, out money))
                     if (money > 0)
                         ac.Add(money);
             }
             else if (btn.Text.Equals("Take Money"))
             {
                 Decimal money = 0.00M;
-                if (Decimal.TryParse(textBox1.Text, out money))
+                if (Decimal.TryParse(moneyTxt, out money))
                     if(money >0)
                     ac.Take(money);
             }
             else if (btn.Text.Equals("Buy"))
             {
                 Decimal money = 0.00M;
-                if (Decimal.TryParse(textBox1.Text, out money))
+                if (Decimal.TryParse(moneyTxt, out money))
                 {
                     if (money>0)
                     ac.Buy(money);
@@ -102,8 +111,9 @@ public partial class Form1 : Form
             }
             else
                 return;
+            GuiComboBox(this.comboBox1, ListAccount, ac);
 
-           
+
 
         }
 
@@ -123,20 +133,34 @@ public partial class Form1 : Form
               sumBuy: sender.SumBuy,
               cashBack: sender.CashBack
             ));      
-        Grid(dataGridView1, ListAccEvents);      
+        Grid(dataGridView1, ListAccEvents,null);      
     }
 
 
    
 
-    void GridRefresh<T>(DataGridView MyGrid, List<T> lst) 
+    void GridRefresh<T>(DataGridView MyGrid, List<T> lst,Account? ac) 
     {
         if (MyGrid == null)
             return;
+        if (lst is List<AccountEvents> == false)
+            return; 
+           var ls = lst as List<AccountEvents>;
+        if (ls == null)
+            return;
 
-            Action action = () =>
+        List<AccountEvents> list=ls;
+        if (ac != null)
+        {
+            list = ls.FindAll(x => x.IdAccount.Equals(ac.IdAccount));
+            if (list == null || list.Count == 0)
+                return;
+        }
+            
+        Action action = () =>
             {
-                var grdList = new BindingList<T>(lst);
+
+                var grdList = new BindingList<AccountEvents>(list);
                 MyGrid.DataSource = grdList;
                 MyGrid.AllowUserToAddRows = false;
                 MyGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -150,7 +174,7 @@ public partial class Form1 : Form
                 action();
     }
 
-    void ComboRefresh(object ob, List<Account> lst)
+    void ComboRefresh(object ob, List<Account> lst, Account? ac)
     {
         if (ob == null)
             return;
@@ -160,7 +184,11 @@ public partial class Form1 : Form
             {
                 var ls = lst.Select(x => x.IdAccount).ToList();
                 comb.DataSource = ls;
-            }
+
+                if (ac != null)
+                    comb.SelectedItem = ac.IdAccount;
+             }
+
         };
         if (InvokeRequired)
             BeginInvoke(action);
