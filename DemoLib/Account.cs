@@ -45,7 +45,7 @@
         /// <summary>
         /// Номер счета клиента
         /// </summary>
-        public readonly Guid IdAccount; 
+        public  Guid IdAccount { get; private set; } 
 
         /// <summary>
         /// Создание счета

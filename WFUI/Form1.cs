@@ -14,24 +14,33 @@ public partial class Form1 : Form
     Account? _Account { get; set; }
     public delegate void GridGui<T>(DataGridView  grd, List<T> lst);
     GridGui<AccountEvents> Grid;
+    
+
+    public delegate void GuiRefresh<T>(object ob, List<T> lst);
+    GuiRefresh<Account> Gui;
     List<Account> ListAccount { get; set; }
-    BindingSource BindCombo => new BindingSource();
+    
+    //BindingSource BindCombo => new();
 
 
     public Form1()
     {
         InitializeComponent();
         Grid += GridRefresh;
+        Gui += ComboRefresh;
         ListAccount = new List<Account>();
 
         ListAccEvents = new List<AccountEvents>();
         Grid(dataGridView1, ListAccEvents);
 
         this.Controls.OfType<Button>().ToList().ForEach(x => x.Click += new EventHandler(Buttons_Click));
-       
+        Gui(this.comboBox1, ListAccount);
 
     }
 
+   
+
+    
 
     private void Buttons_Click(object? sender, EventArgs e)
     {
@@ -44,7 +53,7 @@ public partial class Form1 : Form
             {
                 _Account = new Account(this.Account_Notify, 0.00M);
                 ListAccount.Add(_Account);
-                GuiComboBoxRefresh(this.comboBox1, ListAccount);
+                Gui(this.comboBox1, ListAccount);
                 _Account.AlgCashBack += (decimal sumBuy) =>
                     {
                         if (sumBuy > 100M)
@@ -61,9 +70,12 @@ public partial class Form1 : Form
 
             if (_Account ==null)
                 return;
-            Account ac = (Account)comboBox1.SelectedValue; 
-            if (ac==null)
+            
+            Guid guid = (Guid)comboBox1.SelectedValue;
+            var acResult=ListAccount.Where(x => x.IdAccount.Equals(guid)).FirstOrDefault();
+            if (acResult == null)
                 return;
+            Account ac = (Account)acResult;
 
             if (btn.Text.Equals("Add Money"))
             {
@@ -110,26 +122,8 @@ public partial class Form1 : Form
               sumAccount: sender.SumAccount,
               sumBuy: sender.SumBuy,
               cashBack: sender.CashBack
-            ));
-
-       
-        Grid(dataGridView1, ListAccEvents);
-
-        // var myMessage = String.Join("  ",
-        //                            // $"Дата:[{DateTime.Now}]",
-        //                            $"Сквозной номер транзакции:[{e.IdOperation}]",
-        //                            $"Номер транзакции по счету:[{sender.IdOperationAccount}]",
-        //                            $"Cчет:[{e.IdAccount}]",
-        //                            $"Операция:[{e.Message}]",
-        //                            $"Сумма:[{e.SumOperation:C2}]",
-        //                            $"Баланс:[{sender.SumAccount:C2}]",
-        //                            $"Сумма покупок:[{sender.SumBuy:C2}]",
-        //                            $"Общий кэшбэк:[{sender.CashBack:C2}]"
-
-        //    );
-        //MessageBox.Show(myMessage);
-
-       
+            ));      
+        Grid(dataGridView1, ListAccEvents);      
     }
 
 
@@ -149,9 +143,6 @@ public partial class Form1 : Form
                 MyGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
                 MyGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 MyGrid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-
-                // Grid.Refresh();
             };
             if (InvokeRequired)
                 BeginInvoke(action);
@@ -159,8 +150,7 @@ public partial class Form1 : Form
                 action();
     }
 
-
-    void GuiComboBoxRefresh(object ob, List<Account> lst)
+    void ComboRefresh(object ob, List<Account> lst)
     {
         if (ob == null)
             return;
@@ -168,26 +158,18 @@ public partial class Form1 : Form
         {
             if (ob is ComboBox comb)
             {
-                // var bindingSource1 = new BindingSource();
-                BindCombo.DataSource = lst;
-
-                comb.DataSource = BindCombo.DataSource;
-
-                comb.DisplayMember = "IdAccount";
-                comb.ValueMember = "IdAccount";
-                comb.Refresh();
+                var ls = lst.Select(x => x.IdAccount).ToList();
+                comb.DataSource = ls;
             }
-
-
-
         };
         if (InvokeRequired)
             BeginInvoke(action);
         else
             action();
-
-
     }
+
+
+
 
 
 }
