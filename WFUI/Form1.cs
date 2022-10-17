@@ -1,38 +1,62 @@
 using DemoLib;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace WFUI;
 
 public partial class Form1 : Form
 {
+    /// <summary>
+    /// Список событий по аккаунту
+    /// </summary>
     List<AccountEvents> ListAccEvents { get; set; }
-    Account? Accnt { get; set; }
-    List<Account> ListAccount { get; set; }
-
-    public delegate void Gui<T>(Object ob, List<T> lst, Account? ac);
-
-    readonly Gui<AccountEvents> DelegatGrid;
-    readonly Gui<Account> DelegatComboBox;
-   
     
+    /// <summary>
+    /// Список аккаунтов
+    /// </summary>
+    List<Account> ListAccount { get; set; }
+   
+    public delegate void GuiGrid<Tlist>( DataGridView  grid, List<Tlist> selList );
 
+    public delegate void GuiSingle<T>(Object ob, List<T> list, T? select);
 
+    readonly GuiGrid<AccountEvents> DelegatGrid;
+
+    readonly GuiSingle<Account> DelegatComboBox;
+
+   
     public Form1()
     {
        
         InitializeComponent();
         this.Text = "Демо версия банк-клиент";
+        this.comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
+
         DelegatGrid += GridRefresh;
         DelegatComboBox += ComboRefresh;
-        this.comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;  
+         
+        
         ListAccount = new List<Account>();
-
         ListAccEvents = new List<AccountEvents>();
-        DelegatGrid(dataGridView1, ListAccEvents,null);
 
+        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents));
+
+        //Привязываем одного обработчика на нажатие всех кнопок
         this.Controls.OfType<Button>().ToList().ForEach(x => x.Click += new EventHandler(Buttons_Click));
-        DelegatComboBox(this.comboBox1, ListAccount,null);
 
+        //привязываем combobox1
+        DelegatComboBox(this.comboBox1, ListAccount, null);
+
+    }
+
+    static List<AccountEvents> SelAcEv(List<AccountEvents> list, Account? ac = null)
+    {
+        if (ac == null)
+            return list;
+
+        var selList = list.FindAll(x => x.IdAccount.Equals(ac.IdAccount));
+        return selList.ToList<AccountEvents>();
     }
 
     private void ComboBox1_SelectedIndexChanged(object? sender, EventArgs e)
@@ -43,7 +67,7 @@ public partial class Form1 : Form
             return;
         Account ac = (Account)acResult;
 
-        DelegatGrid(dataGridView1, ListAccEvents, ac);
+        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents,ac));
     }
 
     private void Buttons_Click(object? sender, EventArgs e)
@@ -57,12 +81,13 @@ public partial class Form1 : Form
             return;
         if (sender is Button btn)
         {
+            Account? account=null;
             if (btn.Text.Equals("Create Account"))
             {
-                Accnt = new Account(this.Account_Notify, 0.00M);
-                ListAccount.Add(Accnt);
-                DelegatComboBox(this.comboBox1, ListAccount,Accnt);
-                Accnt.AlgCashBack += (decimal sumBuy) =>
+                account = new Account(this.Account_Notify, 0.00M);
+                ListAccount.Add(account);
+                DelegatComboBox(this.comboBox1, ListAccount, account);
+                account.AlgCashBack += (decimal sumBuy) =>
                     {
                         if (sumBuy > 100M)
                             return 0.10M;
@@ -76,7 +101,7 @@ public partial class Form1 : Form
                 return;
             }
 
-            if (Accnt ==null)
+            if (account == null)
                 return;
             
             Guid guid = (Guid)comboBox1.SelectedValue;
@@ -132,43 +157,24 @@ public partial class Form1 : Form
               sumBuy: sender.SumBuy,
               cashBack: sender.CashBack
             ));      
-        DelegatGrid(dataGridView1, ListAccEvents,null);      
+        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents));      
     }
 
 
    
 
-    void GridRefresh<T>(Object ob, List<T> lst,Account? ac) 
+    void GridRefresh<Tlist>(DataGridView grid, List<Tlist> selList)
     {
-        if (ob == null)
-            return;
-        if (ob is not DataGridView MyGrid)
-            return; 
-
-        if (lst is List<AccountEvents> == false)
-            return; 
-           var ls = lst as List<AccountEvents>;
-        if (ls == null)
-            return;
-
-        List<AccountEvents> list=ls;
-        if (ac != null)
-        {
-            list = ls.FindAll(x => x.IdAccount.Equals(ac.IdAccount));
-            if (list == null || list.Count == 0)
-                return;
-        }
-            
+                
         Action action = () =>
             {
-
-                var grdList = new BindingList<AccountEvents>(list);
-                MyGrid.DataSource = grdList;
-                MyGrid.AllowUserToAddRows = false;
-                MyGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
-                MyGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-                MyGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                MyGrid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                var grdList = new BindingList<Tlist>(selList);
+                grid.DataSource = grdList;
+                grid.AllowUserToAddRows = false;
+                grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+                grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                grid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             };
             if (InvokeRequired)
                 BeginInvoke(action);
@@ -176,7 +182,7 @@ public partial class Form1 : Form
                 action();
     }
 
-    void ComboRefresh(object ob, List<Account> lst, Account? ac)
+    void ComboRefresh(object ob, List<Account> lst, Account? ac=null)
     {
         if (ob == null)
             return;
