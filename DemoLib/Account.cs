@@ -59,7 +59,12 @@
             IdAccount = Guid.NewGuid();
             this.SumAccount = firstSum;
 
-            notify?.Invoke(this, new AccountEventArgs($"Создание счета", firstSum, IdAccount));
+            notify?.Invoke(this, new AccountEventArgs(  
+                dt:DateTime.Now,   
+                NameOperation:  $"Создание счета",
+                SumOperation:  firstSum,
+               IdAccount:IdAccount)
+                );
         }
 
         AccountHandlerEvent? notify;

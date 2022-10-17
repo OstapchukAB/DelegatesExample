@@ -5,6 +5,8 @@
     /// </summary>
     public class AccountEventArgs : IAccountEventArgs
     {
+        public DateTime Datetime { get; private set; }
+
         /// <summary>
         /// Сквозной номер транзакции
         /// </summary>
@@ -25,8 +27,12 @@
         /// Сумма операции
         /// </summary>
         public decimal SumOperation { get; }
-        public AccountEventArgs(string NameOperation, decimal SumOperation, Guid IdAccount)
+
+       
+
+        public AccountEventArgs(string NameOperation, decimal SumOperation, Guid IdAccount,DateTime? dt=null )
         {
+            this.Datetime = dt ?? DateTime.Now;
             this.Message = NameOperation;
             this.SumOperation = SumOperation;
             this.IdAccount = IdAccount;

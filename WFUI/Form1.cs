@@ -144,6 +144,7 @@ public partial class Form1 : Form
     private void Account_Notify(Account sender, AccountEventArgs e)
     {
         ListAccEvents.Add(new AccountEvents(
+              datetime:e.Datetime, 
               idOperation: AccountEventArgs.IdOperation,
               idOperationAccount: sender.IdOperationAccount,
               idAccount: e.IdAccount,

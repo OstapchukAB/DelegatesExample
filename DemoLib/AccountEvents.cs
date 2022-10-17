@@ -1,11 +1,20 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace DemoLib
 {
+    /// <summary>
+    /// Класс визуализации в Гриде
+    /// </summary>
     public class AccountEvents : IAccount, IAccountEventArgs
     {
-        public AccountEvents(int idOperation,decimal cashBack, int idOperationAccount, decimal sumAccount, decimal sumBuy, Guid idAccount, string message, decimal sumOperation)
+        public AccountEvents(
+            DateTime datetime,
+            int idOperation,decimal cashBack, int idOperationAccount,
+            decimal sumAccount, decimal sumBuy, Guid idAccount,
+            string message, decimal sumOperation)
         {
+            Datetime = datetime;
             IdOperation = idOperation;
             IdOperationAccount = idOperationAccount;
             IdAccount = idAccount;
@@ -16,8 +25,10 @@ namespace DemoLib
             Message = message;
         }
 
-            
-        
+
+        [DisplayName("Дата и время транзакции")]
+        public DateTime Datetime { get; set; }
+
         [DisplayName("Сквозной номер транзакции")]
         public int IdOperation { get; set; }
         
@@ -44,5 +55,7 @@ namespace DemoLib
         
         [DisplayName("Общий кэшбэк")]
         public decimal CashBack { get; set; }
+
+       
     }
 }
