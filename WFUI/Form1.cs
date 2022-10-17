@@ -6,12 +6,13 @@ namespace WFUI;
 public partial class Form1 : Form
 {
     List<AccountEvents> ListAccEvents { get; set; }
-    Account? _Account { get; set; }
+    Account? Accnt { get; set; }
     List<Account> ListAccount { get; set; }
 
     public delegate void Gui<T>(Object ob, List<T> lst, Account? ac);
-    Gui<AccountEvents> DelegatGrid;
-    Gui<Account> DelegatComboBox;
+
+    readonly Gui<AccountEvents> DelegatGrid;
+    readonly Gui<Account> DelegatComboBox;
    
     
 
@@ -58,10 +59,10 @@ public partial class Form1 : Form
         {
             if (btn.Text.Equals("Create Account"))
             {
-                _Account = new Account(this.Account_Notify, 0.00M);
-                ListAccount.Add(_Account);
-                DelegatComboBox(this.comboBox1, ListAccount,_Account);
-                _Account.AlgCashBack += (decimal sumBuy) =>
+                Accnt = new Account(this.Account_Notify, 0.00M);
+                ListAccount.Add(Accnt);
+                DelegatComboBox(this.comboBox1, ListAccount,Accnt);
+                Accnt.AlgCashBack += (decimal sumBuy) =>
                     {
                         if (sumBuy > 100M)
                             return 0.10M;
@@ -75,7 +76,7 @@ public partial class Form1 : Form
                 return;
             }
 
-            if (_Account ==null)
+            if (Accnt ==null)
                 return;
             
             Guid guid = (Guid)comboBox1.SelectedValue;
