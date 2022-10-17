@@ -56,7 +56,7 @@ public partial class Form1 : Form
             return list;
 
         var selList = list.FindAll(x => x.IdAccount.Equals(ac.IdAccount));
-        return selList.ToList<AccountEvents>();
+        return selList;
     }
 
     private void ComboBox1_SelectedIndexChanged(object? sender, EventArgs e)
@@ -65,9 +65,9 @@ public partial class Form1 : Form
         var acResult = ListAccount.Where(x => x.IdAccount.Equals(guid)).FirstOrDefault();
         if (acResult == null)
             return;
-        Account ac = (Account)acResult;
+        Account account = (Account)acResult;
 
-        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents,ac));
+        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents, account));
     }
 
     private void Buttons_Click(object? sender, EventArgs e)
@@ -81,10 +81,9 @@ public partial class Form1 : Form
             return;
         if (sender is Button btn)
         {
-            Account? account=null;
             if (btn.Text.Equals("Create Account"))
             {
-                account = new Account(this.Account_Notify, 0.00M);
+                Account account = new Account(this.Account_Notify, 0.00M);
                 ListAccount.Add(account);
                 DelegatComboBox(this.comboBox1, ListAccount, account);
                 account.AlgCashBack += (decimal sumBuy) =>
@@ -100,9 +99,6 @@ public partial class Form1 : Form
                     };
                 return;
             }
-
-            if (account == null)
-                return;
             
             Guid guid = (Guid)comboBox1.SelectedValue;
             var acResult=ListAccount.Where(x => x.IdAccount.Equals(guid)).FirstOrDefault();
