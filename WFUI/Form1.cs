@@ -181,14 +181,14 @@ public partial class Form1 : Form
             return;
         Action action = () =>
         {
-            if (ob is ComboBox comb)
-            {
+            if (ob is not ComboBox comb)
+                return; 
                 var ls = lst.Select(x => x.IdAccount).ToList();
                 comb.DataSource = ls;
 
                 if (ac != null)
                     comb.SelectedItem = ac.IdAccount;
-             }
+            
 
         };
         if (InvokeRequired)
