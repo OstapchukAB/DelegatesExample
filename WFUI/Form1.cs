@@ -68,14 +68,19 @@ public partial class Form1 : Form
         Account account = (Account)acResult;
 
         DelegatGrid(dataGridView1, SelAcEv(ListAccEvents, account));
+        textBox2.Text = account.CashBack.ToString();     
     }
 
     private void Buttons_Click(object? sender, EventArgs e)
     {
         var moneyTxt = "";
+        var moneyCash = "";
         if (textBox1.Text.Length > 0)
             moneyTxt = textBox1.Text;
         textBox1.Text = "";
+        if (textBox2.Text.Length > 0)
+            moneyCash = textBox2.Text;
+        textBox2.Text = "";
 
         if (sender == null)
             return;
@@ -123,10 +128,19 @@ public partial class Form1 : Form
             else if (btn.Text.Equals("Buy"))
             {
                 Decimal money = 0.00M;
+                Decimal cash = 0.00M;
                 if (Decimal.TryParse(moneyTxt, out money))
                 {
-                    if (money>0)
-                    ac.Buy(money);
+                    if (Decimal.TryParse(moneyCash, out cash))
+                        if (money > 0 && cash >= 0)
+                        {
+                            if (this.checkBox1.Checked == false) 
+                                cash = 0.00M;
+                            else
+                                this.checkBox1.Checked = false;
+
+                            ac.Buy(money, cash);
+                        }
                 }
             }
             else
@@ -154,7 +168,7 @@ public partial class Form1 : Form
               sumBuy: sender.SumBuy,
               cashBack: sender.CashBack
             ));      
-        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents));      
+        DelegatGrid(dataGridView1, SelAcEv(ListAccEvents,sender));      
     }
 
 
@@ -201,8 +215,22 @@ public partial class Form1 : Form
             action();
     }
 
+    private void checkBox1_CheckedChanged(object sender, EventArgs e)
+    {
+        CheckBox ch=  (CheckBox)sender;
+        if (ch.Checked)
+        {
+            textBox2.ReadOnly = true;
+            Decimal sum1, cash;
 
-
-
-
+            Decimal.TryParse(textBox1.Text, out sum1);
+            Decimal.TryParse(textBox2.Text, out cash);
+            textBox3.Text = (sum1 + cash).ToString("C2");
+        }
+        else
+        {
+            textBox2.ReadOnly = false;
+            textBox3.Text = "";
+        }
+    }
 }

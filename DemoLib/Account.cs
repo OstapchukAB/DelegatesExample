@@ -59,8 +59,7 @@
             IdAccount = Guid.NewGuid();
             this.SumAccount = firstSum;
 
-            notify?.Invoke(this, new AccountEventArgs(  
-                dt:DateTime.Now,   
+            notify?.Invoke(this, new AccountEventArgs(     
                 NameOperation:  $"Создание счета",
                 SumOperation:  firstSum,
                IdAccount:IdAccount)
@@ -123,19 +122,32 @@
                 notify?.Invoke(this, new AccountEventArgs($"Отказ в списании", sum, IdAccount));
             }
         }
-        public void Buy(decimal sum)
+        public void Buy(decimal sum,decimal usedCashBack=0.00M)
         {
             IdOperationAccount++;
 
-            if (this.SumAccount >= sum)
+            if (usedCashBack > this.CashBack)
+            {
+                notify?.Invoke(this, new AccountEventArgs($"Отказ в применении скидки. У вас нет столько кэшбэка.", sum, IdAccount));
+                return;
+            }
+
+
+
+            if (this.SumAccount >= (sum + usedCashBack))
             {
                 this.SumAccount -= sum;
 
-                this.SumBuy += sum;
+                this.SumBuy += (sum + usedCashBack);
 
                 notify?.Invoke(this, new AccountEventArgs($"Покупка", sum, IdAccount));
+                if (usedCashBack > 0)
+                {
+                    this.CashBack -= usedCashBack;
+                    notify?.Invoke(this, new AccountEventArgs($"Баллы применены", usedCashBack, IdAccount));
+                }
 
-                var CurentCachBack = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy) ?? 0.00M);
+                var CurentCachBack = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy- usedCashBack) ?? 0.00M);
                 if (CurentCachBack > 0)
                 {
 
