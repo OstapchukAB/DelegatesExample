@@ -7,15 +7,13 @@ public partial class Form1 : Form
 {
     List<AccountEvents> ListAccEvents { get; set; }
     Account? _Account { get; set; }
-    public delegate void GridGui<T>(DataGridView  grd, List<T> lst,Account? ac);
-    GridGui<AccountEvents> Grid;
-    
-
-    public delegate void GuiRefresh<T>(object ob, List<T> lst, Account? ac);
-    GuiRefresh<Account> GuiComboBox;
     List<Account> ListAccount { get; set; }
+
+    public delegate void Gui<T>(Object ob, List<T> lst, Account? ac);
+    Gui<AccountEvents> DelegatGrid;
+    Gui<Account> DelegatComboBox;
+   
     
-    //BindingSource BindCombo => new();
 
 
     public Form1()
@@ -23,16 +21,16 @@ public partial class Form1 : Form
        
         InitializeComponent();
         this.Text = "Демо версия банк-клиент";
-        Grid += GridRefresh;
-        GuiComboBox += ComboRefresh;
+        DelegatGrid += GridRefresh;
+        DelegatComboBox += ComboRefresh;
         this.comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;  
         ListAccount = new List<Account>();
 
         ListAccEvents = new List<AccountEvents>();
-        Grid(dataGridView1, ListAccEvents,null);
+        DelegatGrid(dataGridView1, ListAccEvents,null);
 
         this.Controls.OfType<Button>().ToList().ForEach(x => x.Click += new EventHandler(Buttons_Click));
-        GuiComboBox(this.comboBox1, ListAccount,null);
+        DelegatComboBox(this.comboBox1, ListAccount,null);
 
     }
 
@@ -44,7 +42,7 @@ public partial class Form1 : Form
             return;
         Account ac = (Account)acResult;
 
-        Grid(dataGridView1, ListAccEvents, ac);
+        DelegatGrid(dataGridView1, ListAccEvents, ac);
     }
 
     private void Buttons_Click(object? sender, EventArgs e)
@@ -62,7 +60,7 @@ public partial class Form1 : Form
             {
                 _Account = new Account(this.Account_Notify, 0.00M);
                 ListAccount.Add(_Account);
-                GuiComboBox(this.comboBox1, ListAccount,_Account);
+                DelegatComboBox(this.comboBox1, ListAccount,_Account);
                 _Account.AlgCashBack += (decimal sumBuy) =>
                     {
                         if (sumBuy > 100M)
@@ -111,7 +109,7 @@ public partial class Form1 : Form
             }
             else
                 return;
-            GuiComboBox(this.comboBox1, ListAccount, ac);
+            DelegatComboBox(this.comboBox1, ListAccount, ac);
 
 
 
@@ -133,16 +131,19 @@ public partial class Form1 : Form
               sumBuy: sender.SumBuy,
               cashBack: sender.CashBack
             ));      
-        Grid(dataGridView1, ListAccEvents,null);      
+        DelegatGrid(dataGridView1, ListAccEvents,null);      
     }
 
 
    
 
-    void GridRefresh<T>(DataGridView MyGrid, List<T> lst,Account? ac) 
+    void GridRefresh<T>(Object ob, List<T> lst,Account? ac) 
     {
-        if (MyGrid == null)
+        if (ob == null)
             return;
+        if (ob is not DataGridView MyGrid)
+            return; 
+
         if (lst is List<AccountEvents> == false)
             return; 
            var ls = lst as List<AccountEvents>;
