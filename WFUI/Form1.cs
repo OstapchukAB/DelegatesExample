@@ -68,7 +68,7 @@ public partial class Form1 : Form
         Account account = (Account)acResult;
 
         DelegatGrid(dataGridView1, SelAcEv(ListAccEvents, account));
-        textBox2.Text = account.CashBack.ToString();     
+        textBox2.Text = account.CashBack.ToString("C2");     
     }
 
     private void Buttons_Click(object? sender, EventArgs e)
