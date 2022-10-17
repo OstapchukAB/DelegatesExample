@@ -2,6 +2,7 @@ using DemoLib;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace WFUI;
 
@@ -232,5 +233,17 @@ public partial class Form1 : Form
             textBox2.ReadOnly = false;
             textBox3.Text = "";
         }
+    }
+
+    private void textBox1_TextChanged(object sender, EventArgs e)
+    {
+        //финишная проверка
+        //Regex rg = new Regex(@"\d+\,\d{2}$");
+        Regex rg = new Regex(@"^[0-9]+,?\d{0,2}$");
+
+        if (rg.Match(textBox1.Text).Success)
+            return;
+        else
+            textBox1.Text = "";  
     }
 }

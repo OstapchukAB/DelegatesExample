@@ -86,6 +86,7 @@ partial class Form1
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(110, 27);
             this.textBox1.TabIndex = 5;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // dataGridView1
             // 
@@ -149,6 +150,7 @@ partial class Form1
             // 
             this.textBox3.Location = new System.Drawing.Point(84, 338);
             this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(109, 27);
             this.textBox3.TabIndex = 12;
             // 
