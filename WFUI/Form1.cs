@@ -31,6 +31,9 @@ public partial class Form1 : Form
     {
        
         InitializeComponent();
+        button2.Enabled = false;
+        button3.Enabled = false;
+        button4.Enabled = false;
         this.Text = "Демо версия банк-клиент";
         this.comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
 
@@ -110,12 +113,16 @@ public partial class Form1 : Form
                     };
                 return;
             }
-            
+
+            if (comboBox1.Items.Count == 0)
+                return; 
             Guid guid = (Guid)comboBox1.SelectedValue;
             var acResult=ListAccount.Where(x => x.IdAccount.Equals(guid)).FirstOrDefault();
             if (acResult == null)
                 return;
             Account ac = (Account)acResult;
+            if (ac == null)
+                return; 
 
             if (btn.Text.Equals("Add Money"))
             {
@@ -246,8 +253,12 @@ public partial class Form1 : Form
 
     private void TextBox_TextChanged(object? sender, EventArgs e)
     {
+        textBox3.Text = "";
+        button2.Enabled = false;
+        button3.Enabled = false;
+        button4.Enabled = false;
         //финишная проверка
-        //Regex rg = new Regex(@"\d+\,\d{2}$");
+        Regex rgFinish = new Regex(@"^\d+,\d{2}$");
         Regex rg = new Regex(@"^[0-9]+,?\d{0,2}$");
 
         if (sender == null)
@@ -256,9 +267,21 @@ public partial class Form1 : Form
         {
             if (rg.Match(txt.Text).Success == false)
             {
-                txt.Text = "";
+                txt.Text = Regex.Replace(txt.Text,@"[^0-9,]","");
+               
                 return;
             }
+
+            if (rgFinish.Match(txt.Text).Success)
+            {
+                button2.Enabled = true;
+                button3.Enabled = true;
+                button4.Enabled = true;
+            }
+            else
+                return;
+
+
             // Decimal sum1, cash;
             if (Decimal.TryParse(textBox1.Text, out Decimal sum1) == false)
                 sum1=0.00M;
