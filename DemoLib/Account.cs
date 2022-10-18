@@ -2,7 +2,7 @@
 {
 
     public delegate void AccountHandler(string message);
-    public delegate decimal AccountAlgoritmCashBack(decimal sumBuy);
+    public delegate decimal AccountAlgoritmCashBack(decimal sum,decimal sumBuy);
     public delegate void AccountHandlerEvent(Account sender, AccountEventArgs e);
    
 
@@ -147,12 +147,12 @@
                     notify?.Invoke(this, new AccountEventArgs($"Баллы применены", usedCashBack, IdAccount));
                 }
 
-                var CurentCachBack = decimal.Multiply(sum, algCashBack?.Invoke(SumBuy- usedCashBack) ?? 0.00M);
-                if (CurentCachBack > 0)
+                Decimal CurentCachBack = algCashBack?.Invoke(sum, SumBuy - usedCashBack) ?? 0M; 
+                if (CurentCachBack > 0.00M)
                 {
 
                     this.CashBack = this.CashBack + CurentCachBack;
-                    this.SumBuy = 0;
+                    this.SumBuy = 0.00M;
                     notify?.Invoke(this, new AccountEventArgs($"Вам начислен кэшбэк", CurentCachBack, IdAccount));
                 }
                 //if (this.SumBuy > 100)

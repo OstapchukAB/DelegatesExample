@@ -97,19 +97,21 @@ public partial class Form1 : Form
         {
             if (btn.Text.Equals("Create Account"))
             {
-                Account account = new Account(this.Account_Notify, 0.00M);
+                Account account = new Account(this.Account_Notify, 0M);
                 ListAccount.Add(account);
                 DelegatComboBox(this.comboBox1, ListAccount, account);
-                account.AlgCashBack += (decimal sumBuy) =>
+                account.AlgCashBack += (Decimal sum,Decimal sumBuy) =>
                     {
-                        if (sumBuy > 100M)
-                            return 0.10M;
-                        else if (sumBuy <= 100M)
-                            return 0.01M;
+                        Decimal ret = 0M;
+                        if (sumBuy < 100M)
+                            ret= Decimal.Divide(sum,1000);
+                        else if (sumBuy >= 100M)
+                            ret= Decimal.Divide(sum, 500);
                         else if (sumBuy > 1000M)
-                            return 0.2M;
+                            ret= Decimal.Divide(sum, 100);
                         else
-                            return 0.00M;
+                            ret= 0M;
+                        return Decimal.Round(ret, 2);   
                     };
                 return;
             }
@@ -126,29 +128,29 @@ public partial class Form1 : Form
 
             if (btn.Text.Equals("Add Money"))
             {
-                Decimal money = 0.00M;
+                Decimal money = 0M;
                 if (Decimal.TryParse(moneyTxt, out money))
-                    if (money > 0)
+                    if (money > 0M)
                         ac.Add(money);
             }
             else if (btn.Text.Equals("Take Money"))
             {
-                Decimal money = 0.00M;
+                Decimal money = 0M;
                 if (Decimal.TryParse(moneyTxt, out money))
-                    if(money >0)
+                    if(money >0M)
                     ac.Take(money);
             }
             else if (btn.Text.Equals("Buy"))
             {
-                Decimal money = 0.00M;
-                Decimal cash = 0.00M;
+                Decimal money = 0M;
+                Decimal cash = 0M;
                 if (Decimal.TryParse(moneyTxt, out money))
                 {
                     if (Decimal.TryParse(moneyCash, out cash))
-                        if (money > 0 && cash >= 0)
+                        if (money > 0M && cash >= 0M)
                         {
                             if (this.checkBox1.Checked == false) 
-                                cash = 0.00M;
+                                cash = 0M;
                             else
                                 this.checkBox1.Checked = false;
 
