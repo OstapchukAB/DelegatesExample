@@ -49,7 +49,12 @@ public partial class Form1 : Form
         //привязываем combobox1
         DelegatComboBox(this.comboBox1, ListAccount, null);
 
+        textBox1.TextChanged += new EventHandler(TextBox_TextChanged);
+        textBox2.TextChanged += new EventHandler(TextBox_TextChanged);
+
     }
+
+    
 
     static List<AccountEvents> SelAcEv(List<AccountEvents> list, Account? ac = null)
     {
@@ -69,7 +74,7 @@ public partial class Form1 : Form
         Account account = (Account)acResult;
 
         DelegatGrid(dataGridView1, SelAcEv(ListAccEvents, account));
-        textBox2.Text = account.CashBack.ToString("C2");     
+        textBox2.Text = account.CashBack.ToString();     
     }
 
     private void Buttons_Click(object? sender, EventArgs e)
@@ -222,28 +227,46 @@ public partial class Form1 : Form
         if (ch.Checked)
         {
             textBox2.ReadOnly = true;
-            Decimal sum1, cash;
-
-            Decimal.TryParse(textBox1.Text, out sum1);
-            Decimal.TryParse(textBox2.Text, out cash);
+            if (Decimal.TryParse(textBox1.Text, out Decimal sum1) == false)
+                sum1 = 0.00M;
+            if (Decimal.TryParse(textBox2.Text, out Decimal cash) == false)
+                cash = 0.00M;
+            if (this.checkBox1.Checked == false)
+                cash = 0.00M;
             textBox3.Text = (sum1 + cash).ToString("C2");
         }
         else
         {
             textBox2.ReadOnly = false;
-            textBox3.Text = "";
+            if (Decimal.TryParse(textBox1.Text, out Decimal sum1) == false)
+                sum1 = 0;
+            textBox3.Text = (sum1 + 0).ToString("C2");
         }
     }
 
-    private void textBox1_TextChanged(object sender, EventArgs e)
+    private void TextBox_TextChanged(object? sender, EventArgs e)
     {
         //финишная проверка
         //Regex rg = new Regex(@"\d+\,\d{2}$");
         Regex rg = new Regex(@"^[0-9]+,?\d{0,2}$");
 
-        if (rg.Match(textBox1.Text).Success)
+        if (sender == null)
             return;
-        else
-            textBox1.Text = "";  
+        if (sender is TextBox txt)
+        {
+            if (rg.Match(txt.Text).Success == false)
+            {
+                txt.Text = "";
+                return;
+            }
+            // Decimal sum1, cash;
+            if (Decimal.TryParse(textBox1.Text, out Decimal sum1) == false)
+                sum1=0.00M;
+            if (Decimal.TryParse(textBox2.Text, out Decimal cash) == false)
+                cash = 0.00M;
+            if (this.checkBox1.Checked == false)
+                cash = 0.00M;
+            textBox3.Text = (sum1 + cash).ToString("C2");
+        }
     }
 }
